@@ -12,12 +12,10 @@ import {
 } from './types';
 import { addIacAnalytics } from './analytics';
 import { TestLimitReachedError } from './usage-tracking';
-import { filterIgnoredIssues } from './policy';
 import { TestResult } from '../../../../lib/snyk-test/legacy';
 import {
   applyCustomSeverities,
   cleanLocalCache,
-  formatScanResults,
   getIacOrgSettings,
   loadFiles,
   parseFiles,
@@ -31,7 +29,7 @@ import { findAndLoadPolicy } from '../../../../lib/policy';
 import { isFeatureFlagSupportedForOrg } from '../../../../lib/feature-flags';
 import { initRules } from './rules';
 import { NoFilesToScanError } from './file-loader';
-import { formatAndShareResults } from './share-results';
+import { processResults } from './process-results';
 import { generateProjectAttributes, generateTags } from '../../monitor';
 
 // this method executes the local processing engine and then formats the results to adapt with the CLI output.
@@ -124,36 +122,19 @@ export async function test(
     }
 
     const scannedFiles = await scanFiles(parsedFiles);
+    // TODO: decide if this should go into scanFiles or stay here
     const resultsWithCustomSeverities = await applyCustomSeverities(
       scannedFiles,
       iacOrgSettings.customPolicies,
     );
-
-    let projectPublicIds: Record<string, string> = {};
-    let gitRemoteUrl: string | undefined;
-
-    if (options.report) {
-      ({ projectPublicIds, gitRemoteUrl } = await formatAndShareResults({
-        results: resultsWithCustomSeverities,
-        options,
-        orgPublicId,
-        policy,
-        tags,
-        attributes,
-      }));
-    }
-
-    const formattedResults = formatScanResults(
+    const { filteredIssues, ignoreCount } = await processResults(
       resultsWithCustomSeverities,
-      options,
-      iacOrgSettings.meta,
-      projectPublicIds,
-      gitRemoteUrl,
-    );
-
-    const { filteredIssues, ignoreCount } = filterIgnoredIssues(
+      orgPublicId,
+      iacOrgSettings,
       policy,
-      formattedResults,
+      tags,
+      attributes,
+      options,
     );
 
     try {
