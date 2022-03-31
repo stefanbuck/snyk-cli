@@ -1,0 +1,335 @@
+{
+	"options": {
+		"deep": false,
+		"only_managed": false,
+		"only_unmanaged": false
+	},
+	"summary": {
+		"total_resources": 52,
+		"total_changed": 0,
+		"total_unmanaged": 41,
+		"total_missing": 5,
+		"total_managed": 6,
+		"total_iac_source_count": 1
+	},
+	"managed": [
+		{
+			"id": "AKIAXVMHWD4BZYCSQOG3",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "storageservice"
+			},
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "storageservice"
+			}
+		},
+		{
+			"id": "storageservice-arn:aws:iam::526954929923:policy/sqshandlingpolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "storageservice",
+			"type": "aws_iam_user",
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "storageservice"
+			}
+		},
+		{
+			"id": "arn:aws:iam::526954929923:policy/s3listingpolicy",
+			"type": "aws_iam_policy",
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "s3lstpol"
+			}
+		},
+		{
+			"id": "arn:aws:iam::526954929923:policy/sqshandlingpolicy",
+			"type": "aws_iam_policy",
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "sqshandlingpolicy"
+			}
+		},
+		{
+			"id": "storageservice:storageservice_s3_admin",
+			"type": "aws_iam_user_policy",
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "storageservice_s3_admin"
+			}
+		}
+	],
+	"unmanaged": [
+		{
+			"id": "AKIAXVMHWD4BRT2NN4CO",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "admin"
+			}
+		},
+		{
+			"id": "AKIAXVMHWD4BTMNTJAKL",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "user"
+			}
+		},
+		{
+			"id": "AKIAXVMHWD4BZ3UGZRVX",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "martin"
+			}
+		},
+		{
+			"id": "arn:aws:iam::526954929923:policy/driftctl-user-policy",
+			"type": "aws_iam_policy"
+		},
+		{
+			"id": "AWSServiceRoleForCloudTrail-arn:aws:iam::aws:policy/aws-service-role/CloudTrailServiceRolePolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AWSServiceRoleForDynamoDBReplication-arn:aws:iam::aws:policy/aws-service-role/DynamoDBReplicationServiceRolePolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "AWSServiceRoleForRDS-arn:aws:iam::aws:policy/aws-service-role/AmazonRDSServiceRolePolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "admin-arn:aws:iam::aws:policy/job-function/SystemAdministrator",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "martin-arn:aws:iam::aws:policy/AdministratorAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "user-arn:aws:iam::aws:policy/ReadOnlyAccess",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "user-arn:aws:iam::aws:policy/job-function/SystemAdministrator",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "OrganizationAccountAccessRole",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "driftctl-role",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "iam_for_lambda",
+			"type": "aws_iam_role"
+		},
+		{
+			"id": "OrganizationAccountAccessRole:AdministratorAccess",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "driftctl-role:driftctl-role-policy",
+			"type": "aws_iam_role_policy"
+		},
+		{
+			"id": "admin",
+			"type": "aws_iam_user"
+		},
+		{
+			"id": "martin",
+			"type": "aws_iam_user"
+		},
+		{
+			"id": "user",
+			"type": "aws_iam_user"
+		},
+		{
+			"id": "igw-08ef26e12512ff7cd",
+			"type": "aws_internet_gateway"
+		},
+		{
+			"id": "nacl-1234973027",
+			"type": "aws_network_acl_rule",
+			"human_readable_attributes": {
+				"CIDR": "0.0.0.0/0",
+				"Egress": "true",
+				"Network": "acl-056cb6e67f7e1fb71",
+				"Protocol": "All",
+				"Rule number": "100"
+			}
+		},
+		{
+			"id": "nacl-2402053966",
+			"type": "aws_network_acl_rule",
+			"human_readable_attributes": {
+				"CIDR": "0.0.0.0/0",
+				"Egress": "false",
+				"Network": "acl-056cb6e67f7e1fb71",
+				"Protocol": "All",
+				"Rule number": "100"
+			}
+		},
+		{
+			"id": "r-rtb-03f3651440b10daf4505606960",
+			"type": "aws_route",
+			"human_readable_attributes": {
+				"Destination": "pl-6da54004",
+				"Table": "rtb-03f3651440b10daf4"
+			}
+		},
+		{
+			"id": "r-rtb-0892149d8901488e11080289494",
+			"type": "aws_route",
+			"human_readable_attributes": {
+				"Destination": "0.0.0.0/0",
+				"Table": "rtb-0892149d8901488e1"
+			}
+		},
+		{
+			"id": "r-rtb-0944d3327d47630431080289494",
+			"type": "aws_route",
+			"human_readable_attributes": {
+				"Destination": "0.0.0.0/0",
+				"Table": "rtb-0944d3327d4763043"
+			}
+		},
+		{
+			"id": "r-rtb-0ba6c9d11069ab6e0505606960",
+			"type": "aws_route",
+			"human_readable_attributes": {
+				"Destination": "pl-6da54004",
+				"Table": "rtb-0ba6c9d11069ab6e0"
+			}
+		},
+		{
+			"id": "Z0550848EDQNFSD05MSY_blog.martin.ski_A",
+			"type": "aws_route53_record",
+			"human_readable_attributes": {
+				"Type": "A"
+			}
+		},
+		{
+			"id": "Z0550848EDQNFSD05MSY",
+			"type": "aws_route53_zone"
+		},
+		{
+			"id": "rtb-03f3651440b10daf4",
+			"type": "aws_route_table"
+		},
+		{
+			"id": "rtb-0892149d8901488e1",
+			"type": "aws_route_table"
+		},
+		{
+			"id": "rtb-0944d3327d4763043",
+			"type": "aws_route_table"
+		},
+		{
+			"id": "rtb-0ba6c9d11069ab6e0",
+			"type": "aws_route_table"
+		},
+		{
+			"id": "rtbassoc-01613a3c87b176fd3",
+			"type": "aws_route_table_association",
+			"human_readable_attributes": {
+				"Table": "rtb-03f3651440b10daf4"
+			}
+		},
+		{
+			"id": "rtbassoc-080566085522ca34a",
+			"type": "aws_route_table_association",
+			"human_readable_attributes": {
+				"Table": "rtb-0892149d8901488e1"
+			}
+		},
+		{
+			"id": "rtbassoc-085e4b4b6f67c185b",
+			"type": "aws_route_table_association",
+			"human_readable_attributes": {
+				"Table": "rtb-0ba6c9d11069ab6e0"
+			}
+		},
+		{
+			"id": "rtbassoc-0f7a45bd571a24cab",
+			"type": "aws_route_table_association",
+			"human_readable_attributes": {
+				"Table": "rtb-0944d3327d4763043"
+			}
+		},
+		{
+			"id": "subnet-0180be8b9ca09f545",
+			"type": "aws_subnet"
+		},
+		{
+			"id": "subnet-064c93baa3e556bd7",
+			"type": "aws_subnet"
+		},
+		{
+			"id": "subnet-0cad4105a809fabb1",
+			"type": "aws_subnet"
+		},
+		{
+			"id": "subnet-0ddd9e836236efb03",
+			"type": "aws_subnet"
+		},
+		{
+			"id": "vpc-00e555cc12bca5b5e",
+			"type": "aws_vpc"
+		}
+	],
+	"missing": [
+		{
+			"id": "AKIAXVMHWD4BRJ6WCGAD",
+			"type": "aws_iam_access_key",
+			"human_readable_attributes": {
+				"User": "loadbalancer"
+			},
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "lb"
+			}
+		},
+		{
+			"id": "loadbalancer-arn:aws:iam::526954929923:policy/s3listingpolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "loadbalancer-arn:aws:iam::526954929923:policy/sqshandlingpolicy",
+			"type": "aws_iam_policy_attachment"
+		},
+		{
+			"id": "loadbalancer",
+			"type": "aws_iam_user",
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "loadbalancer"
+			}
+		},
+		{
+			"id": "loadbalancer:lb_ec2_ro",
+			"type": "aws_iam_user_policy",
+			"source": {
+				"source": "tfstate://../driftctl/terraform.tfstate",
+				"namespace": "",
+				"internal_name": "lb_ec2_ro"
+			}
+		}
+	],
+	"differences": null,
+	"coverage": 11,
+	"alerts": null,
+	"provider_name": "aws",
+	"provider_version": "3.19.0",
+	"scan_duration": 2
+}

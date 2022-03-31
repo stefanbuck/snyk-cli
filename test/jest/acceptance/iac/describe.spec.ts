@@ -1,14 +1,14 @@
 import { startMockServer } from './helpers';
 import envPaths from 'env-paths';
-import { driftctlVersion } from '../../../../src/lib/iac/drift';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { getFixturePath } from '../../util/getFixturePath';
 import * as uuid from 'uuid';
 import * as rimraf from 'rimraf';
-import { processDriftctlOutput } from '../../../../src/lib/iac/drift';
+import { processHTMLOutput } from '../../../../src/lib/iac/drift';
 import { DescribeOptions } from '../../../../src/lib/iac/types';
+import { driftctlVersion } from '../../../../src/lib/iac/drift/driftctl';
 
 const paths = envPaths('snyk');
 
@@ -196,7 +196,7 @@ describe('processDriftctlOutput', () => {
       kind: 'fmt',
       html: true,
     };
-    const output = processDriftctlOutput(opts, inputData.toString('utf8'));
+    const output = processHTMLOutput(opts, inputData.toString('utf8'));
 
     expect(output).toBe(expectedOutputData.toString('utf8'));
   });
@@ -221,7 +221,7 @@ describe('processDriftctlOutput', () => {
       kind: 'fmt',
       'html-file-output': tmpFilepath,
     };
-    processDriftctlOutput(opts, inputData.toString('utf8'));
+    processHTMLOutput(opts, inputData.toString('utf8'));
 
     const data = fs.readFileSync(tmpFilepath, {
       encoding: 'utf8',

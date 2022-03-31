@@ -1,12 +1,8 @@
 import * as mockFs from 'mock-fs';
 
 import {
-  DCTL_EXIT_CODES,
-  driftctlVersion,
   driftignoreFromPolicy,
-  generateArgs,
   parseDriftAnalysisResults,
-  translateExitCode,
   updateExcludeInPolicy,
   validateArgs,
 } from '../../../../../src/lib/iac/drift';
@@ -26,6 +22,12 @@ import * as snykPolicy from 'snyk-policy';
 import { Policy } from '../../../../../src/lib/policy/find-and-load-policy';
 import { DescribeRequiredArgumentError } from '../../../../../src/lib/errors/describe-required-argument-error';
 import { DescribeExclusiveArgumentError } from '../../../../../src/lib/errors/describe-exclusive-argument-error';
+import {
+  DCTL_EXIT_CODES,
+  driftctlVersion,
+  generateArgs,
+  translateExitCode,
+} from '../../../../../src/lib/iac/drift/driftctl';
 
 const paths = envPaths('snyk');
 

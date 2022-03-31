@@ -1,6 +1,7 @@
 import { CustomError } from '../errors';
 import { IaCErrorCodes } from '../../cli/commands/test/iac-local-execution/types';
 import { getErrorStringCode } from '../../cli/commands/test/iac-local-execution/error-utils';
+import { keys } from 'lodash';
 
 export const services2resources = new Map<string, Array<string>>([
   // Amazon
@@ -218,6 +219,15 @@ export function verifyServiceMappingExists(services: string[]): void {
       );
     }
   }
+}
+
+export function findServiceMappingForType(type: string): string {
+  for (const service of services2resources.keys()) {
+    if (services2resources.get(service)?.includes(type)) {
+      return service;
+    }
+  }
+  return '';
 }
 
 function existingServiceNames(): string {
