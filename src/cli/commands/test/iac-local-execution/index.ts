@@ -29,7 +29,7 @@ import { findAndLoadPolicy } from '../../../../lib/policy';
 import { isFeatureFlagSupportedForOrg } from '../../../../lib/feature-flags';
 import { initRules } from './rules';
 import { NoFilesToScanError } from './file-loader';
-import { processResults } from './process-results';
+import { processResults } from './process-results/process-results';
 import { generateProjectAttributes, generateTags } from '../../monitor';
 
 // this method executes the local processing engine and then formats the results to adapt with the CLI output.

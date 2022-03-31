@@ -1,9 +1,9 @@
-import { filterIgnoredIssues } from './policy';
+import { filterIgnoredIssues } from '../policy';
 import { formatAndShareResults } from './share-results';
-import { formatScanResults } from './measurable-methods';
-import { Policy } from '../../../../lib/policy/find-and-load-policy';
-import { ProjectAttributes, Tag } from '../../../../lib/types';
-import { IacFileScanResult, IacOrgSettings, IaCTestFlags } from './types';
+import { formatScanResults } from '../measurable-methods';
+import { Policy } from '../../../../../lib/policy/find-and-load-policy';
+import { ProjectAttributes, Tag } from '../../../../../lib/types';
+import { IacFileScanResult, IacOrgSettings, IaCTestFlags } from '../types';
 
 export const processResults = async (
   resultsWithCustomSeverities: IacFileScanResult[],
