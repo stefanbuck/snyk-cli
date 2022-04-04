@@ -7,25 +7,18 @@ import { MissingArgError } from '../../../lib/errors';
 
 import * as snyk from '../../../lib';
 import {
-  IacFileInDirectory,
-  IacOutputMeta,
   Options,
   TestOptions,
 } from '../../../lib/types';
 import { MethodArgs } from '../../args';
 import { TestCommandResult } from '../../commands/types';
 import { LegacyVulnApiResult, TestResult } from '../../../lib/snyk-test/legacy';
-import { mapIacTestResult } from '../../../lib/snyk-test/iac-test-result';
 
 import {
   summariseErrorResults,
   summariseVulnerableResults,
 } from '../../../lib/formatters';
 import * as utils from './utils';
-import {
-  getIacDisplayErrorFileOutput,
-  shareResultsOutput,
-} from '../../../lib/formatters/iac-output';
 import { getEcosystemForTest, testEcosystem } from '../../../lib/ecosystems';
 import { hasFixes, hasPatches, hasUpgrades } from '../../../lib/vuln-helpers';
 import { FailOn } from '../../../lib/snyk-test/common';
@@ -34,7 +27,6 @@ import {
   extractDataToSendFromResults,
 } from '../../../lib/formatters/test/format-test-results';
 
-import { test as iacTest } from './iac-local-execution/';
 import { validateCredentials } from './validate-credentials';
 import { validateTestOptions } from './validate-test-options';
 import { setDefaultTestOptions } from './set-default-test-options';
@@ -51,9 +43,7 @@ import {
   containsSpotlightVulnIds,
   notificationForSpotlightVulns,
 } from '../../../lib/spotlight-vuln-notification';
-import { isIacShareResultsOptions } from './iac-local-execution/assert-iac-options-flag';
-import { assertIaCOptionsFlags } from './iac-local-execution/assert-iac-options-flag';
-import { hasFeatureFlag } from '../../../lib/feature-flags';
+import iacTestCommand from './iac';
 
 const debug = Debug('snyk-test');
 const SEPARATOR = '\n-------------------------------------------------------\n';
@@ -64,6 +54,11 @@ export default async function test(
   ...args: MethodArgs
 ): Promise<TestCommandResult> {
   const { options: originalOptions, paths } = processCommandArgs(...args);
+
+  if (originalOptions.iac) {
+    return await iacTestCommand(...args);
+  }
+
   const options = setDefaultTestOptions(originalOptions);
   validateTestOptions(options);
   validateCredentials(options);
@@ -101,10 +96,6 @@ export default async function test(
   const resultOptions: Array<Options & TestOptions> = [];
   const results = [] as any[];
 
-  // Holds an array of scanned file metadata for output.
-  let iacScanFailures: IacFileInDirectory[] | undefined;
-  let iacOutputMeta: IacOutputMeta | undefined;
-
   // Promise waterfall to test all other paths sequentially
   for (const path of paths) {
     // Create a copy of the options so a specific test can
@@ -116,19 +107,7 @@ export default async function test(
 
     let res: (TestResult | TestResult[]) | Error;
     try {
-      if (options.iac) {
-        assertIaCOptionsFlags(process.argv);
-        const { results, failures } = await iacTest(path, testOpts);
-        iacOutputMeta = {
-          orgName: results[0]?.org,
-          projectName: results[0]?.projectName,
-          gitRemoteUrl: results[0]?.meta?.gitRemoteUrl,
-        };
-        res = results;
-        iacScanFailures = failures;
-      } else {
-        res = await snyk.test(path, testOpts);
-      }
+      res = await snyk.test(path, testOpts);
     } catch (error) {
       // not throwing here but instead returning error response
       // for legacy flow reasons.
@@ -174,9 +153,7 @@ export default async function test(
   // resultOptions is now an array of 1 or more options used for
   // the tests results is now an array of 1 or more test results
   // values depend on `options.json` value - string or object
-  const mappedResults = !options.iac
-    ? createErrorMappedResultsForJsonOutput(results)
-    : results.map(mapIacTestResult);
+  const mappedResults = createErrorMappedResultsForJsonOutput(results);
 
   const {
     stdout: dataToSend,
@@ -229,18 +206,11 @@ export default async function test(
     throw err;
   }
 
-  const isNewIacOutputSupported = options.iac
-    ? await hasFeatureFlag('iacCliOutput', options)
-    : false;
-
   let response = results
     .map((result, i) => {
       return displayResult(
         results[i] as LegacyVulnApiResult,
-        {
-          ...resultOptions[i],
-          isNewIacOutputSupported,
-        },
+        resultOptions[i],
         result.foundProjectCount,
       );
     })
@@ -256,16 +226,6 @@ export default async function test(
 
   let summaryMessage = '';
   let errorResultsLength = errorResults.length;
-
-  if (options.iac && iacScanFailures) {
-    errorResultsLength = iacScanFailures.length || errorResults.length;
-
-    for (const reason of iacScanFailures) {
-      response += chalk.bold.red(
-        getIacDisplayErrorFileOutput(reason, isNewIacOutputSupported),
-      );
-    }
-  }
 
   if (results.length > 1) {
     const projects = results.length === 1 ? 'project' : 'projects';
@@ -317,10 +277,6 @@ export default async function test(
     );
     response += spotlightVulnsMsg;
 
-    if (isIacShareResultsOptions(options)) {
-      response += chalk.bold.white(shareResultsOutput(iacOutputMeta!)) + EOL;
-    }
-
     const error = new Error(response) as any;
     // take the code of the first problem to go through error
     // translation
@@ -338,10 +294,6 @@ export default async function test(
   response += getProtectUpgradeWarningForPaths(
     packageJsonPathsWithSnykDepForProtect,
   );
-
-  if (isIacShareResultsOptions(options)) {
-    response += chalk.bold.white(shareResultsOutput(iacOutputMeta!)) + EOL;
-  }
 
   return TestCommandResult.createHumanReadableTestCommandResult(
     response,
