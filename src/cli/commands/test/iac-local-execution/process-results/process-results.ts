@@ -3,9 +3,14 @@ import { formatAndShareResults } from './share-results';
 import { formatScanResults } from '../measurable-methods';
 import { Policy } from '../../../../../lib/policy/find-and-load-policy';
 import { ProjectAttributes, Tag } from '../../../../../lib/types';
-import { IacFileScanResult, IacOrgSettings, IaCTestFlags } from '../types';
+import {
+  FormattedResult,
+  IacFileScanResult,
+  IacOrgSettings,
+  IaCTestFlags,
+} from '../types';
 
-export const processResults = async (
+export async function processResults(
   resultsWithCustomSeverities: IacFileScanResult[],
   orgPublicId: string,
   iacOrgSettings: IacOrgSettings,
@@ -14,9 +19,9 @@ export const processResults = async (
   attributes: ProjectAttributes | undefined,
   options: IaCTestFlags,
 ): Promise<{
-  filteredIssues;
-  ignoreCount;
-}> => {
+  filteredIssues: FormattedResult[];
+  ignoreCount: number;
+}> {
   let projectPublicIds: Record<string, string> = {};
   let gitRemoteUrl: string | undefined;
 
@@ -40,4 +45,4 @@ export const processResults = async (
   );
 
   return filterIgnoredIssues(policy, formattedResults);
-};
+}
