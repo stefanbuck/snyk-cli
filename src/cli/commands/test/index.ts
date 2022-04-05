@@ -6,10 +6,7 @@ import chalk from 'chalk';
 import { MissingArgError } from '../../../lib/errors';
 
 import * as snyk from '../../../lib';
-import {
-  Options,
-  TestOptions,
-} from '../../../lib/types';
+import { Options, TestOptions } from '../../../lib/types';
 import { MethodArgs } from '../../args';
 import { TestCommandResult } from '../../commands/types';
 import { LegacyVulnApiResult, TestResult } from '../../../lib/snyk-test/legacy';
@@ -225,7 +222,7 @@ export default async function test(
   }
 
   let summaryMessage = '';
-  let errorResultsLength = errorResults.length;
+  const errorResultsLength = errorResults.length;
 
   if (results.length > 1) {
     const projects = results.length === 1 ? 'project' : 'projects';
